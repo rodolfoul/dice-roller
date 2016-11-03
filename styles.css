@@ -1,0 +1,84 @@
+.roll-label {
+	display: inline;
+	vertical-align: middle;
+	width: 150px;
+	font-size: large;
+}
+
+.roll-button {
+	width: 120px;
+	margin-bottom: 5px;
+}
+
+.value {
+	color: red;
+	width: 35px;
+}
+
+.max-skill {
+	font-weight: 800;
+}
+
+.game-block {
+	display: inline-block;
+	border: 2px black solid;
+    margin: 3px;
+    padding: 10px;
+}
+
+.quality {
+	font-weight: bold;
+}
+
+.games {
+	display: flex;
+}
+
+.fight > div {
+	display: inline-block;
+	border: 1px black solid;
+	margin-left: -2.5px;
+	margin-right: -2.5px;
+	width: 130px;
+}
+
+.form-row {
+	display: inline-flex;
+}
+
+.form-row input {
+	width: 50%;
+	margin-left: 5px;
+}
+
+.form-row label {
+	margin-bottom: 0px;
+	width: 50%;
+	text-align: right;
+}
+
+.fight .title {
+	text-align: center;
+}
+
+.fight label, .fight input {
+    vertical-align: middle;  
+}
+.fight input {
+	/*display: table-cell;
+	width:100%*/
+	/*width: 50px;*/
+}
+
+.creature {
+	display: table;
+}
+
+td {
+	text-align: center;
+	font-size: large;
+}
+
+table, td, tr {
+	border-bottom: 1px solid black;
+}
