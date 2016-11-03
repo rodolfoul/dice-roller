@@ -1,5 +1,7 @@
 var UINT32_MAX_VALUE = 0xFFFFFFFF;
 
+console.log('Test');
+
 function roll(nTimes, dType) {
 	var results = [];
 	for (var i = 1; i <= nTimes; i++) {
