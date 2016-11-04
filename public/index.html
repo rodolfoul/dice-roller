@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html ng-app="main">
+<head>
+	<title>Dice roller</title>
+	<meta charset="utf-8"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.7/css/bootstrap.min.css"
+	      integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+</head>
+<body>
+<h1>Dice Roller</h1>
+<div>
+	<input type="button" class="btn btn-info roll-button" value="Roll dice d6" onclick="writeRolls(this, 1, 6)"/>
+	<span class="roll-label" style="display: none;"></span>
+</div>
+
+<div>
+	<input type="button" class="btn btn-info roll-button" value="Roll two d6" onclick="writeRolls(this, 2, 6)"/>
+	<span class="roll-label" style="display: none;"/>
+</div>
+
+<div>
+	<input type="button" class="btn btn-info roll-button" value="Roll three d6" onclick="writeRolls(this, 3, 6)"/>
+	<span class="roll-label" style="display: none;"/>
+</div>
+
+<div>
+	<input type="button" class="btn btn-info roll-button" value="Roll four d6" onclick="writeRolls(this, 4, 6)"/>
+	<span class="roll-label" style="display: none;"/>
+</div>
+
+<div>
+	<input type="button" class="btn btn-info roll-button" value="Roll dice d20" onclick="writeRolls(this, 1, 20)"/>
+	<span class="roll-label" style="display: none;"/>
+</div>
+
+<div class="games">
+	<div class="game-block">
+		<h2>Pathfinder</h2>
+		<input type="button" class="btn btn-info" value="Generate Character" onclick="generatePfChar(this)"/>
+		<h3>Stats (<span class="quality">0</span> / 100%)</h3>
+		<table>
+			<tr><td>STR</td><td class="value"></td></tr>
+			<tr><td>DEX</td><td class="value"></td></tr>
+			<tr><td>CON</td><td class="value"></td></tr>
+			<tr><td>INT</td><td class="value"></td></tr>
+			<tr><td>WIS</td><td class="value"></td></tr>
+			<tr><td>CHA</td><td class="value"></td></tr>
+		</table>
+	</div>
+
+	<div class="game-block" ng-controller="GamebookController">
+		<h2>Deathtrap Dungeon</h2>
+		<input type="button" class="btn btn-info" value="Generate Character" onclick="generateDdChar(this)"/>
+		<h3>Stats (<span class="quality">0</span> / 100%)</h3>
+
+		<table>
+			<tr><td>SKILL</td><td class="value"></td></tr>
+			<tr><td>STAMINA</td><td class="value"></td></tr>
+			<tr><td>LUCK</td><td class="value"></td></tr>
+		</table>
+
+		<input type="button" class="btn btn-info roll-button" value="Apply" onclick="$()"/>
+
+
+		<div class="fight">
+			<h3>Fight</h3>
+
+			<div char-type="mainChar" ng-controller="CharController">
+				<h4 class="title">You</h4>
+
+				<div class="form-row">
+					<label for="stamina">stamina:</label>
+					<input name="stamina" type="text" ng-model="stamina"/>
+				</div>
+
+				<div class="form-row">
+					<label for="skill">skill:</label>
+					<input name="skill" type="text" ng-model="skill"/>
+				</div>
+
+				<div class="form-row">
+					<span>roll: </span><b ng-bind="roll"></b>
+				</div>
+				<div class="form-row">
+					<span>Atk. Str.:</span><b ng-bind="attackStrength"></b>
+				</div>
+			</div>
+
+			<div char-type="creature" ng-controller="CharController">
+				<h4 class="title">Creature</h4>
+
+				<div class="form-row">
+					<label for="stamina">stamina:</label>
+					<input id="stamina" type="text" ng-model="stamina"/>
+				</div>
+
+				<div class="form-row">
+					<label for="skill">skill:</label>
+					<input id="skill" type="text" ng-model="skill"/>
+				</div>
+
+				<div class="form-row">
+					<span>roll: </span><b ng-bind="roll"></b>
+				</div>
+				<div class="form-row">
+					<span>Atk. Str.:</span><b ng-bind="attackStrength"></b>
+				</div>
+
+			</div>
+		</div>
+		<div>
+			<span>Result:</span><span ng-bind=""></span>
+		</div>
+
+		<div>
+			<input type="button" class="btn btn-info" value="Start fight" onclick="currentFight = new Fight(this);"/>
+			<input type="button" class="btn btn-info" name="next-step" value="Next step" ng-click="nextStep();"
+			       ng-disabled="creature.stamina <= 0 || mainChar.stamina <= 0">
+		</div>
+	</div>
+</div>
+<!-- <div style="width:300px; display:table">
+    <label for="MyInput" style="display:table-cell; width:1px">label&nbsp;text</label>
+    <input type="text" id="MyInput" style="display:table-cell; width:100%" />
+</div> -->
+
+<script src="https://cdn.jsdelivr.net/jquery/3.1.1/jquery.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/sprintf.js/1.0.3/sprintf.min.js"
+        integrity="sha256-4SfOfItcJVeIG5lT3Zxlm/esGCSKEUZDPEgTfS4DJ9A=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="main.js"></script>
+</body>
+</html>

@@ -39,22 +39,29 @@
 	border: 1px black solid;
 	margin-left: -2.5px;
 	margin-right: -2.5px;
-	width: 130px;
+	width: 150px;
+}
+
+[char-type] {
+	padding: 7px;
 }
 
 .form-row {
 	display: inline-flex;
+	width: 100%;
 }
 
-.form-row input {
-	width: 50%;
-	margin-left: 5px;
-}
 
-.form-row label {
+.form-row :nth-child(1) {
 	margin-bottom: 0px;
 	width: 50%;
 	text-align: right;
+
+}
+
+.form-row :nth-child(2) {
+	width: 50%;
+	margin-left: 5px;
 }
 
 .fight .title {
