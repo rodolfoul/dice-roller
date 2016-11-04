@@ -7,6 +7,7 @@
 	      integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
 </head>
 <body>
 <h1>Dice Roller</h1>
@@ -41,12 +42,30 @@
 		<input type="button" class="btn btn-info" value="Generate Character" onclick="generatePfChar(this)"/>
 		<h3>Stats (<span class="quality">0</span> / 100%)</h3>
 		<table>
-			<tr><td>STR</td><td class="value"></td></tr>
-			<tr><td>DEX</td><td class="value"></td></tr>
-			<tr><td>CON</td><td class="value"></td></tr>
-			<tr><td>INT</td><td class="value"></td></tr>
-			<tr><td>WIS</td><td class="value"></td></tr>
-			<tr><td>CHA</td><td class="value"></td></tr>
+			<tr>
+				<td>STR</td>
+				<td class="value"></td>
+			</tr>
+			<tr>
+				<td>DEX</td>
+				<td class="value"></td>
+			</tr>
+			<tr>
+				<td>CON</td>
+				<td class="value"></td>
+			</tr>
+			<tr>
+				<td>INT</td>
+				<td class="value"></td>
+			</tr>
+			<tr>
+				<td>WIS</td>
+				<td class="value"></td>
+			</tr>
+			<tr>
+				<td>CHA</td>
+				<td class="value"></td>
+			</tr>
 		</table>
 	</div>
 
@@ -56,9 +75,18 @@
 		<h3>Stats (<span class="quality">0</span> / 100%)</h3>
 
 		<table>
-			<tr><td>SKILL</td><td class="value"></td></tr>
-			<tr><td>STAMINA</td><td class="value"></td></tr>
-			<tr><td>LUCK</td><td class="value"></td></tr>
+			<tr>
+				<td>SKILL</td>
+				<td class="value"></td>
+			</tr>
+			<tr>
+				<td>STAMINA</td>
+				<td class="value"></td>
+			</tr>
+			<tr>
+				<td>LUCK</td>
+				<td class="value"></td>
+			</tr>
 		</table>
 
 		<input type="button" class="btn btn-info roll-button" value="Apply" onclick="$()"/>
@@ -67,17 +95,20 @@
 		<div class="fight">
 			<h3>Fight</h3>
 
+			<input type="button" class="btn btn-info" value="Start fight" ng-click="initializeFight()"/><br/>
 			<div char-type="mainChar" ng-controller="CharController">
 				<h4 class="title">You</h4>
 
 				<div class="form-row">
-					<label for="stamina">stamina:</label>
-					<input name="stamina" type="text" ng-model="stamina"/>
+					<label>stamina:</label>
+					<input type="text" ng-model="stamina" ng-if="$parent.currentStep == 0"/>
+					<span ng-bind="stamina" ng-if="$parent.currentStep != 0"></span>
 				</div>
 
 				<div class="form-row">
-					<label for="skill">skill:</label>
-					<input name="skill" type="text" ng-model="skill"/>
+					<label>skill:</label>
+					<input ype="text" ng-model="skill" ng-if="$parent.currentStep == 0"/>
+					<span ng-bind="skill" ng-if="$parent.currentStep != 0"/>
 				</div>
 
 				<div class="form-row">
@@ -89,16 +120,19 @@
 			</div>
 
 			<div char-type="creature" ng-controller="CharController">
+
 				<h4 class="title">Creature</h4>
 
 				<div class="form-row">
-					<label for="stamina">stamina:</label>
-					<input id="stamina" type="text" ng-model="stamina"/>
+					<label>stamina:</label>
+					<input type="text" ng-model="stamina" ng-if="$parent.currentStep == 0"/>
+					<span ng-bind="stamina" ng-if="$parent.currentStep != 0"></span>
 				</div>
 
 				<div class="form-row">
-					<label for="skill">skill:</label>
-					<input id="skill" type="text" ng-model="skill"/>
+					<label>skill:</label>
+					<input type="text" ng-model="skill" ng-if="$parent.currentStep == 0"/>
+					<span ng-bind="skill" ng-if="$parent.currentStep != 0"/>
 				</div>
 
 				<div class="form-row">
@@ -110,21 +144,17 @@
 
 			</div>
 		</div>
-		<div>
-			<span>Result:</span><span ng-bind=""></span>
+		<div class="form-row">
+			<span>Result:</span><span ng-bind="statusMessage()"></span>
 		</div>
 
 		<div>
-			<input type="button" class="btn btn-info" value="Start fight" onclick="currentFight = new Fight(this);"/>
 			<input type="button" class="btn btn-info" name="next-step" value="Next step" ng-click="nextStep();"
-			       ng-disabled="creature.stamina <= 0 || mainChar.stamina <= 0">
+			       ng-disabled="battleEnded()">
+			<input type="button" class="btn btn-info" value="Flee" ng-disabled="battleEnded()" ng-click="flee()">
 		</div>
 	</div>
 </div>
-<!-- <div style="width:300px; display:table">
-    <label for="MyInput" style="display:table-cell; width:1px">label&nbsp;text</label>
-    <input type="text" id="MyInput" style="display:table-cell; width:100%" />
-</div> -->
 
 <script src="https://cdn.jsdelivr.net/jquery/3.1.1/jquery.min.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>

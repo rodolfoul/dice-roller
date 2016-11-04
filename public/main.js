@@ -1,31 +1,72 @@
 const UINT32_MAX_VALUE = 0xFFFFFFFF;
 
 
-let mainApp = angular.module('main', []);
+let mainApp = angular.module('main', ['ngAnimate']);
 mainApp.controller('GamebookController', function ($scope, $element) {
-	$scope.currentStep = 0;
+
+
+	$scope.initializeFight = function () {
+		$scope.currentStep = 0;
+		$scope.fled = false;
+	};
+	$scope.initializeFight();
+
+	$scope.test = function () {
+		console.log('aa');
+	};
 
 	$scope.nextStep = function () {
 		let turn = $scope.currentStep % 3;
+
+		let mainChar = $scope.mainChar;
+		let creature = $scope.creature;
+
 		if (turn == 0) {
-			$scope.creature.rollAttackStrength();
+			creature.rollAttackStrength();
 
 		} else if (turn == 1) {
 			$scope.mainChar.rollAttackStrength();
 
 		} else if (turn == 2) {
-			let mainStrength = $scope.mainChar.attackStrength;
-			let creatStregth = $scope.creature.attackStrength;
+			let mainStrength = mainChar.attackStrength;
+			let creatStregth = creature.attackStrength;
 
 			if (mainStrength < creatStregth) {
-				$scope.mainChar.stamina -= 2;
+				mainChar.stamina -= 2;
+				mainChar.wasHit = true;
+				creature.wasHit = false;
 
 			} else if (mainStrength > creatStregth) {
-				$scope.creature.stamina -= 2;
+				creature.stamina -= 2;
+				mainChar.wasHit = false;
+				creature.wasHit = true;
 			}
 		}
+
 		$scope.currentStep++;
-	}
+	};
+
+	$scope.battleEnded = function () {
+		return $scope.creature.stamina <= 0 || $scope.mainChar.stamina <= 0 || $scope.fled;
+	};
+
+	$scope.flee = function () {
+		$scope.currentStep++;
+		$scope.mainChar.stamina -= 2;
+		$scope.fled = true;
+	};
+
+	$scope.statusMessage = function () {
+		if ($scope.mainChar.stamina <= 0) {
+			return 'You die!';
+		} else if ($scope.creature.stamina <= 0) {
+			return 'Creature dies!';
+		} else if ($scope.creature.wasHit) {
+			return 'Creature loses 2';
+		} else if ($scope.mainChar.wasHit) {
+			return 'You lose 2';
+		}
+	};
 
 	$scope.nextStepButton = $($element[0]).find('input[name="next-step"]');
 });
@@ -37,6 +78,10 @@ mainApp.controller('CharController', function CharController($scope, $element) {
 	$scope.attackStrength = 0;
 
 	$scope.$parent[$($element[0]).attr('char-type')] = $scope;
+
+	$scope.test = function () {
+		console.log('bb');
+	};
 
 	$scope.rollAttackStrength = function () {
 		let a = randomRange(1, 6);
