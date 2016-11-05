@@ -10,33 +10,41 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
 </head>
 <body>
-<h1>Dice Roller</h1>
-<div>
-	<input type="button" class="btn btn-info roll-button" value="Roll dice d6" onclick="writeRolls(this, 1, 6)"/>
-	<span class="roll-label" style="display: none;"></span>
-</div>
-
-<div>
-	<input type="button" class="btn btn-info roll-button" value="Roll two d6" onclick="writeRolls(this, 2, 6)"/>
-	<span class="roll-label" style="display: none;"/>
-</div>
-
-<div>
-	<input type="button" class="btn btn-info roll-button" value="Roll three d6" onclick="writeRolls(this, 3, 6)"/>
-	<span class="roll-label" style="display: none;"/>
-</div>
-
-<div>
-	<input type="button" class="btn btn-info roll-button" value="Roll four d6" onclick="writeRolls(this, 4, 6)"/>
-	<span class="roll-label" style="display: none;"/>
-</div>
-
-<div>
-	<input type="button" class="btn btn-info roll-button" value="Roll dice d20" onclick="writeRolls(this, 1, 20)"/>
-	<span class="roll-label" style="display: none;"/>
-</div>
 
 <div class="games">
+	<div class="game-block">
+		<h2>Dice Roller</h2>
+		<div>
+			<input type="button" class="btn btn-info roll-button" value="Roll dice d6"
+			       onclick="writeRolls(this, 1, 6)"/>
+			<span class="roll-label" style="display: none;"></span>
+		</div>
+
+		<div>
+			<input type="button" class="btn btn-info roll-button" value="Roll two d6" onclick="writeRolls(this, 2, 6)"/>
+			<span class="roll-label" style="display: none;"/>
+		</div>
+
+		<div>
+			<input type="button" class="btn btn-info roll-button" value="Roll three d6"
+			       onclick="writeRolls(this, 3, 6)"/>
+			<span class="roll-label" style="display: none;"/>
+		</div>
+
+		<div>
+			<input type="button" class="btn btn-info roll-button" value="Roll four d6"
+			       onclick="writeRolls(this, 4, 6)"/>
+			<span class="roll-label" style="display: none;"/>
+		</div>
+
+		<div>
+			<input type="button" class="btn btn-info roll-button" value="Roll dice d20"
+			       onclick="writeRolls(this, 1, 20)"/>
+			<span class="roll-label" style="display: none;"/>
+		</div>
+
+	</div>
+
 	<div class="game-block">
 		<h2>Pathfinder</h2>
 		<input type="button" class="btn btn-info" value="Generate Character" onclick="generatePfChar(this)"/>
@@ -44,53 +52,56 @@
 		<table>
 			<tr>
 				<td>STR</td>
-				<td class="value"></td>
+				<td class="skill-roll"></td>
 			</tr>
 			<tr>
 				<td>DEX</td>
-				<td class="value"></td>
+				<td class="skill-roll"></td>
 			</tr>
 			<tr>
 				<td>CON</td>
-				<td class="value"></td>
+				<td class="skill-roll"></td>
 			</tr>
 			<tr>
 				<td>INT</td>
-				<td class="value"></td>
+				<td class="skill-roll"></td>
 			</tr>
 			<tr>
 				<td>WIS</td>
-				<td class="value"></td>
+				<td class="skill-roll"></td>
 			</tr>
 			<tr>
 				<td>CHA</td>
-				<td class="value"></td>
+				<td class="skill-roll"></td>
 			</tr>
 		</table>
 	</div>
 
-	<div class="game-block" ng-controller="GamebookController">
+	<div class="game-block deathtrap-dungeon" ng-controller="GamebookController">
 		<h2>Deathtrap Dungeon</h2>
-		<input type="button" class="btn btn-info" value="Generate Character" onclick="generateDdChar(this)"/>
-		<h3>Stats (<span class="quality">0</span> / 100%)</h3>
 
-		<table>
-			<tr>
-				<td>SKILL</td>
-				<td class="value"></td>
-			</tr>
-			<tr>
-				<td>STAMINA</td>
-				<td class="value"></td>
-			</tr>
-			<tr>
-				<td>LUCK</td>
-				<td class="value"></td>
-			</tr>
-		</table>
+		<div ng-controller="SkillsController">
+			<input type="button" class="btn btn-info" value="Generate Character" ng-click="generateSkills()"/>
+			<!--onclick="generateDdChar(this)"-->
+			<h3>Stats (<span class="quality" ng-bind="quality | number:0"></span> / 100%)</h3>
 
-		<input type="button" class="btn btn-info roll-button" value="Apply" onclick="$()"/>
+			<table>
+				<tr>
+					<td>SKILL</td>
+					<td class="skill-roll" ng-bind="skill"></td>
+				</tr>
+				<tr>
+					<td>STAMINA</td>
+					<td class="skill-roll" ng-bind="stamina"></td>
+				</tr>
+				<tr>
+					<td>LUCK</td>
+					<td class="skill-roll" ng-bind="luck"></td>
+				</tr>
+			</table>
 
+			<input type="button" class="btn btn-info roll-button" value="Apply" onclick="$()"/>
+		</div>
 
 		<div class="fight">
 			<h3>Fight</h3>
@@ -101,21 +112,23 @@
 
 				<div class="form-row">
 					<label>stamina:</label>
-					<input type="text" ng-model="stamina" ng-if="$parent.currentStep == 0"/>
-					<span ng-bind="stamina" ng-if="$parent.currentStep != 0"></span>
+					<input type="text" class="single-number" ng-model="char.stamina" ng-if="$parent.currentStep == 0"
+					       integer/>
+					<span ng-bind="char.stamina" ng-if="$parent.currentStep != 0"></span>
 				</div>
 
 				<div class="form-row">
 					<label>skill:</label>
-					<input ype="text" ng-model="skill" ng-if="$parent.currentStep == 0"/>
-					<span ng-bind="skill" ng-if="$parent.currentStep != 0"/>
+					<input type="text" class="single-number" ng-model="char.skill" ng-if="$parent.currentStep == 0"
+					       integer/>
+					<span ng-bind="char.skill" ng-if="$parent.currentStep != 0"/>
 				</div>
 
 				<div class="form-row">
 					<span>roll: </span><b ng-bind="roll"></b>
 				</div>
 				<div class="form-row">
-					<span>Atk. Str.:</span><b ng-bind="attackStrength"></b>
+					<span>Atk. Str.:</span><b ng-bind="char.attackStrength"></b>
 				</div>
 			</div>
 
@@ -125,33 +138,48 @@
 
 				<div class="form-row">
 					<label>stamina:</label>
-					<input type="text" ng-model="stamina" ng-if="$parent.currentStep == 0"/>
-					<span ng-bind="stamina" ng-if="$parent.currentStep != 0"></span>
+					<input type="text" class="single-number" ng-model="char.stamina" ng-if="$parent.currentStep == 0"
+					       integer/>
+					<span ng-bind="char.stamina" ng-if="$parent.currentStep != 0"></span>
 				</div>
 
 				<div class="form-row">
 					<label>skill:</label>
-					<input type="text" ng-model="skill" ng-if="$parent.currentStep == 0"/>
-					<span ng-bind="skill" ng-if="$parent.currentStep != 0"/>
+					<input type="text" class="single-number" ng-model="char.skill" ng-if="$parent.currentStep == 0"
+					       integer/>
+					<span ng-bind="char.skill" ng-if="$parent.currentStep != 0"/>
 				</div>
 
 				<div class="form-row">
 					<span>roll: </span><b ng-bind="roll"></b>
 				</div>
 				<div class="form-row">
-					<span>Atk. Str.:</span><b ng-bind="attackStrength"></b>
+					<span>Atk. Str.:</span><b ng-bind="char.attackStrength"></b>
 				</div>
 
 			</div>
-		</div>
-		<div class="form-row">
-			<span>Result:</span><span ng-bind="statusMessage()"></span>
-		</div>
+			<div class="form-row">
+				<span>Result:</span><span ng-bind="statusMessage()"></span>
+			</div>
 
-		<div>
-			<input type="button" class="btn btn-info" name="next-step" value="Next step" ng-click="nextStep();"
-			       ng-disabled="battleEnded()">
-			<input type="button" class="btn btn-info" value="Flee" ng-disabled="battleEnded()" ng-click="flee()">
+			<div>
+				<input type="button" class="btn btn-info" value="Test your luck" ng-click="testLuck();"
+				       ng-disabled="battleEnded()">
+				<input type="button" class="btn btn-info" name="next-step" value="Next step" ng-click="nextStep();"
+				       ng-disabled="battleEnded()">
+				<input type="button" class="btn btn-info" value="Flee" ng-disabled="battleEnded()" ng-click="flee()">
+			</div>
+		</div>
+		<div ng-controller="LuckController">
+			<h3>Luck test</h3>
+
+			<label>Current luck:</label>
+			<input type="text" class="single-number" ng-model="currentLuck" integer/> <span class="red" ng-if="roll1">subtracting luck</span><br/>
+			<input type="button" class="btn btn-info" value="Test luck" ng-click="testLuck()"/>
+			<span ng-show="roll1 !== undefined">
+				{{roll1}} + {{roll2}} = <b>{{roll1 + roll2}} {{comparator}} {{currentLuck + 1}}</b> - <b
+					ng-bind="statusMessage()"></b>
+			</span>
 		</div>
 	</div>
 </div>

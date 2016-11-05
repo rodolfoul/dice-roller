@@ -10,13 +10,21 @@
 	margin-bottom: 5px;
 }
 
-.value {
+.skill-roll {
 	color: red;
 	width: 35px;
 }
 
 .max-skill {
 	font-weight: 800;
+}
+
+.deathtrap-dungeon {
+	width: 350px;
+}
+
+.red {
+	color: red;
 }
 
 .game-block {
@@ -34,12 +42,16 @@
 	display: flex;
 }
 
-.fight > div {
+.fight > [char-type] {
 	display: inline-block;
 	border: 1px black solid;
 	margin-left: -2.5px;
 	margin-right: -2.5px;
-	width: 150px;
+	width: 50%;
+}
+
+input.single-number[type="text"] {
+	width: 40px;
 }
 
 [char-type] {
@@ -70,11 +82,6 @@
 
 .fight label, .fight input {
     vertical-align: middle;  
-}
-.fight input {
-	/*display: table-cell;
-	width:100%*/
-	/*width: 50px;*/
 }
 
 .creature {
