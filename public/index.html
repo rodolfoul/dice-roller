@@ -99,8 +99,6 @@
 					<td class="skill-roll" ng-bind="luck"></td>
 				</tr>
 			</table>
-
-			<input type="button" class="btn btn-info roll-button" value="Apply" onclick="$()"/>
 		</div>
 
 		<div class="fight">
@@ -112,8 +110,7 @@
 
 				<div class="form-row">
 					<label>stamina:</label>
-					<input type="text" class="single-number" ng-model="char.stamina" ng-if="$parent.currentStep == 0"
-					       integer/>
+					<input type="text" class="single-number" ng-model="char.stamina" ng-if="$parent.currentStep == 0" integer/>
 					<span ng-bind="char.stamina" ng-if="$parent.currentStep != 0"></span>
 				</div>
 

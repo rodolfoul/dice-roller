@@ -3,12 +3,20 @@ const UINT32_MAX_VALUE = 0xFFFFFFFF;
 
 let mainApp = angular.module('main', ['ngAnimate']);
 
-mainApp.directive('integer', function(){
+mainApp.directive('integer', function () {
 	return {
 		require: 'ngModel',
-		link: function(scope, ele, attr, ctrl){
-			ctrl.$parsers.unshift(function(viewValue){
-				return parseInt(viewValue, 10);
+		link: function (scope, ele, attr, ctrl) {
+
+			ctrl.$parsers.unshift(function (inputValue) {
+				var transformedInput = inputValue.replace(/\D+/g, '');
+
+				if (transformedInput != inputValue) {
+					ctrl.$setViewValue(transformedInput);
+					ctrl.$render();
+				}
+
+				return parseInt(transformedInput, 10);
 			});
 		}
 	};
@@ -38,6 +46,14 @@ mainApp.controller('GamebookController', function ($scope, $element, ControllerS
 	$scope.initializeFight = function () {
 		$scope.currentStep = 0;
 		$scope.fled = false;
+
+		if (typeof $scope.mainChar !== 'undefined') {
+			$scope.mainChar.initialize();
+		}
+
+		if (typeof $scope.creature !== 'undefined') {
+			$scope.creature.initialize();
+		}
 	};
 	$scope.initializeFight();
 
@@ -74,6 +90,10 @@ mainApp.controller('GamebookController', function ($scope, $element, ControllerS
 
 	$scope.battleEnded = function () {
 		return $scope.creature.char.stamina <= 0 || $scope.mainChar.char.stamina <= 0 || $scope.fled;
+	};
+
+	$scope.enableLuck = function () {
+		// if()
 	};
 
 	$scope.flee = function () {
@@ -121,11 +141,17 @@ mainApp.controller('GamebookController', function ($scope, $element, ControllerS
 
 mainApp.controller('CharController', function CharController($scope, $element) {
 
-	$scope.char = {
-		stamina: '',
-		skill: '',
-		attackStrength: ''
+	$scope.initialize = function () {
+		$scope.char = {
+			stamina: '',
+			skill: '',
+			attackStrength: ''
+		};
+
+		$scope.roll = '';
 	};
+
+	$scope.initialize();
 
 	$scope.$parent[$($element[0]).attr('char-type')] = $scope;
 
