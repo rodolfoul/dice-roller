@@ -27,6 +27,40 @@
 	color: red;
 }
 
+.fight-value {
+	transition: all linear .7s;
+}
+
+.fight-value.ng-hide {
+	opacity: 0;
+}
+
+.value-reveal {
+	animation: 1.5s value-reveal-keyframes;
+}
+
+.fade-in {
+	animation: 1.5s fade-in;
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes value-reveal-keyframes {
+	from {
+		color: rgba(0, 0, 0, 0);
+	}
+	to {
+		color: red;
+	}
+}
+
 .game-block {
 	display: inline-block;
 	border: 2px black solid;
@@ -65,15 +99,14 @@ input.single-number[type="text"] {
 
 
 .form-row :nth-child(1) {
-	margin-bottom: 0px;
 	width: 50%;
 	text-align: right;
-
+	padding-right: 2.5px;
 }
 
 .form-row :nth-child(2) {
 	width: 50%;
-	margin-left: 5px;
+	padding-left: 2.5px;
 }
 
 .fight .title {

@@ -22,6 +22,75 @@ mainApp.directive('integer', function () {
 	};
 });
 
+const animateOnChange = 'animateOnChange';
+mainApp.directive(animateOnChange, function ($animate) {
+	return function (scope, elem, attr) {
+		const fadeInClass = 'fade-in';
+		scope.$watch(attr[animateOnChange], function () {
+			$animate.addClass(elem, fadeInClass).then(function () {
+				$animate.removeClass(elem, fadeInClass);
+			});
+		});
+	};
+});
+
+const valueRevealerDirective = 'valueRevealer';
+mainApp.directive(valueRevealerDirective, function ($animate) {
+	return function (scope, elem, attr) {
+
+		let elements = $(elem.siblings().find('.' + attr[valueRevealerDirective]));
+		let quality = $(elem.siblings().find('.quality'));
+
+
+		const valueRevealClass = 'value-reveal';
+		const fadeInClass = 'fade-in';
+
+		elem.on('click', function () {
+
+			elem.prop('disabled', true);
+
+			if (quality.length > 0) {
+				$animate.addClass(quality, fadeInClass)
+					.then(function () {
+						$animate.removeClass(quality, fadeInClass);
+					});
+			}
+
+			elements.each(function (_, el) {
+				$animate.addClass(el, valueRevealClass)
+					.then(function () {
+						$animate.removeClass(el, valueRevealClass);
+						elem.prop('disabled', false);
+					});
+			});
+		});
+	};
+});
+
+
+const elementRevealer = 'elementRevealer';
+mainApp.directive(elementRevealer, function ($animate) {
+	return function (scope, elem, attr) {
+
+		let elements = $(elem.parent().find('.' + attr[elementRevealer]));
+		const fadeInClass = 'fade-in';
+
+		elem.on('click', function () {
+
+			elem.prop('disabled', true);
+
+			elements.each(function (_, el) {
+				$animate.addClass(el, fadeInClass)
+					.then(function () {
+						$animate.removeClass(el, fadeInClass);
+						elem.prop('disabled', false);
+					});
+			});
+			scope.$digest();
+		});
+	}
+});
+
 mainApp.service('ControllerService', function () {
 });
 
@@ -64,7 +133,11 @@ mainApp.controller('GamebookController', function ($scope, $element, ControllerS
 		let creature = $scope.creature;
 
 		if (turn == 0) {
+
 			creature.rollAttackStrength();
+			$scope.mainChar.roll = '';
+			mainChar.wasHit = false;
+			creature.wasHit = false;
 
 		} else if (turn == 1) {
 			$scope.mainChar.rollAttackStrength();
@@ -73,8 +146,6 @@ mainApp.controller('GamebookController', function ($scope, $element, ControllerS
 			let mainStrength = mainChar.char.attackStrength;
 			let creatStregth = creature.char.attackStrength;
 
-			mainChar.wasHit = false;
-			creature.wasHit = false;
 			if (mainStrength < creatStregth) {
 				mainChar.char.stamina -= 2;
 				mainChar.wasHit = true;
@@ -86,25 +157,27 @@ mainApp.controller('GamebookController', function ($scope, $element, ControllerS
 		}
 
 		$scope.currentStep++;
+		$scope.mayUseLuck = mainChar.wasHit || creature.wasHit;
 	};
 
 	$scope.battleEnded = function () {
 		return $scope.creature.char.stamina <= 0 || $scope.mainChar.char.stamina <= 0 || $scope.fled;
 	};
 
-	$scope.enableLuck = function () {
-		// if()
-	};
-
 	$scope.flee = function () {
 		$scope.currentStep++;
 		$scope.mainChar.char.stamina -= 2;
+		$scope.mainChar.wasHit = true;
 		$scope.fled = true;
+		$scope.mayUseLuck = true;
 	};
 
 	$scope.statusMessage = function () {
 		let attackTurn = $scope.currentStep > 0 && ($scope.currentStep) % 3 == 0;
-		if ($scope.currentStep > 0 && $scope.mainChar.char.stamina <= 0) {
+
+		if($scope.fled) {
+			return 'You fled';
+		} else if ($scope.currentStep > 0 && $scope.mainChar.char.stamina <= 0) {
 			return 'You die!';
 		} else if ($scope.currentStep > 0 && $scope.creature.char.stamina <= 0) {
 			return 'Creature dies!';
@@ -119,10 +192,9 @@ mainApp.controller('GamebookController', function ($scope, $element, ControllerS
 	};
 
 	$scope.testLuck = function () {
-		$scope.nextStep();
+		$scope.mayUseLuck = false;
 
-		ControllerService.LuckController.testLuck();
-		let isLucky = ControllerService.LuckController.isLucky;
+		let isLucky = ControllerService.LuckController.testLuck();
 
 		if (isLucky && $scope.mainChar.wasHit) {
 			$scope.mainChar.char.stamina++;
@@ -143,8 +215,8 @@ mainApp.controller('CharController', function CharController($scope, $element) {
 
 	$scope.initialize = function () {
 		$scope.char = {
-			stamina: '',
-			skill: '',
+			stamina: 10,
+			skill: 10,
 			attackStrength: ''
 		};
 
@@ -166,6 +238,11 @@ mainApp.controller('CharController', function CharController($scope, $element) {
 mainApp.controller('LuckController', function ($scope, ControllerService) {
 	ControllerService.LuckController = $scope;
 
+	$scope.clearLuck = function () {
+		$scope.roll1 = null;
+		$scope.roll2 = null;
+	};
+
 	$scope.testLuck = function () {
 		$scope.roll1 = randomRange(1, 6);
 		$scope.roll2 = randomRange(1, 6);
@@ -179,6 +256,8 @@ mainApp.controller('LuckController', function ($scope, ControllerService) {
 			$scope.comparator = '>'
 		}
 		$scope.currentLuck--;
+
+		return $scope.isLucky;
 	};
 
 	$scope.statusMessage = function () {

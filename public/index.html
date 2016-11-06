@@ -6,8 +6,10 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.7/css/bootstrap.min.css"
 	      integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="styles.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/jquery/3.1.1/jquery.min.js"
+	        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
 </head>
 <body>
 
@@ -81,8 +83,9 @@
 		<h2>Deathtrap Dungeon</h2>
 
 		<div ng-controller="SkillsController">
-			<input type="button" class="btn btn-info" value="Generate Character" ng-click="generateSkills()"/>
-			<!--onclick="generateDdChar(this)"-->
+			<input type="button" class="btn btn-info" value="Generate Character" ng-click="generateSkills()"
+			       value-revealer="skill-roll"/>
+
 			<h3>Stats (<span class="quality" ng-bind="quality | number:0"></span> / 100%)</h3>
 
 			<table>
@@ -104,13 +107,15 @@
 		<div class="fight">
 			<h3>Fight</h3>
 
-			<input type="button" class="btn btn-info" value="Start fight" ng-click="initializeFight()"/><br/>
+			<input type="button" class="btn btn-info" value="Start fight" ng-click="initializeFight()"
+			       ng-disabled="currentStep == 0"/><br/>
 			<div char-type="mainChar" ng-controller="CharController">
 				<h4 class="title">You</h4>
 
 				<div class="form-row">
 					<label>stamina:</label>
-					<input type="text" class="single-number" ng-model="char.stamina" ng-if="$parent.currentStep == 0" integer/>
+					<input type="text" class="single-number" ng-model="char.stamina" ng-if="$parent.currentStep == 0"
+					       integer/>
 					<span ng-bind="char.stamina" ng-if="$parent.currentStep != 0"></span>
 				</div>
 
@@ -122,10 +127,10 @@
 				</div>
 
 				<div class="form-row">
-					<span>roll: </span><b ng-bind="roll"></b>
+					<span>roll: </span><b class="fight-value" ng-bind="roll" ng-show="roll"></b>
 				</div>
 				<div class="form-row">
-					<span>Atk. Str.:</span><b ng-bind="char.attackStrength"></b>
+					<span>Atk. Str.:</span><b class="fight-value" ng-bind="char.attackStrength" ng-show="roll"></b>
 				</div>
 			</div>
 
@@ -148,20 +153,21 @@
 				</div>
 
 				<div class="form-row">
-					<span>roll: </span><b ng-bind="roll"></b>
+					<span>roll:</span> <b class="fight-value" ng-bind="roll" animate-on-change="roll"></b>
 				</div>
 				<div class="form-row">
-					<span>Atk. Str.:</span><b ng-bind="char.attackStrength"></b>
+					<span>Atk. Str.:</span> <b class="fight-value" ng-bind="char.attackStrength" ng-show="roll"></b>
 				</div>
 
 			</div>
 			<div class="form-row">
-				<span>Result:</span><span ng-bind="statusMessage()"></span>
+				<span>Result:</span><span ng-bind="statusMessage()" class="fight-value"
+				                          ng-show="statusMessage()"></span>
 			</div>
 
 			<div>
 				<input type="button" class="btn btn-info" value="Test your luck" ng-click="testLuck();"
-				       ng-disabled="battleEnded()">
+				       ng-disabled="!mayUseLuck">
 				<input type="button" class="btn btn-info" name="next-step" value="Next step" ng-click="nextStep();"
 				       ng-disabled="battleEnded()">
 				<input type="button" class="btn btn-info" value="Flee" ng-disabled="battleEnded()" ng-click="flee()">
@@ -171,9 +177,19 @@
 			<h3>Luck test</h3>
 
 			<label>Current luck:</label>
-			<input type="text" class="single-number" ng-model="currentLuck" integer/> <span class="red" ng-if="roll1">subtracting luck</span><br/>
-			<input type="button" class="btn btn-info" value="Test luck" ng-click="testLuck()"/>
-			<span ng-show="roll1 !== undefined">
+
+
+			<!--<form >-->
+				<input type="text" class="single-number" ng-model="currentLuck" ng-change="clearLuck()" integer/>
+				<span class="red reveal" ng-show="roll1">subtracting luck</span>
+				<!--<span ng-show="luckForm.currentLuck.$touched && luckForm.currentLuck.$invalid">Luck value is required.</span>-->
+			<!--</form>-->
+			<br/>
+
+
+			<input type="button" class="btn btn-info" value="Test luck" ng-click="testLuck()"
+			       element-revealer="reveal" ng-disabled="!currentLuck"/>
+			<span ng-show="roll1" class="reveal">
 				{{roll1}} + {{roll2}} = <b>{{roll1 + roll2}} {{comparator}} {{currentLuck + 1}}</b> - <b
 					ng-bind="statusMessage()"></b>
 			</span>
@@ -181,8 +197,6 @@
 	</div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/jquery/3.1.1/jquery.min.js"
-        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/sprintf.js/1.0.3/sprintf.min.js"
         integrity="sha256-4SfOfItcJVeIG5lT3Zxlm/esGCSKEUZDPEgTfS4DJ9A=" crossorigin="anonymous"></script>
 <script type="text/javascript" src="main.js"></script>

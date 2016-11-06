@@ -1,4 +1,6 @@
 - add validation to luck and skills (Check if number present), check angular
-- Add animation after next step, generate character
-- Implement test your luck after flee
-- Adjust layout
+- Make better animations for next step
+
+X Implement test your luck after flee
+X Make animations for luck test
+X Adjust layout
