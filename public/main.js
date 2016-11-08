@@ -137,6 +137,43 @@ mainApp.controller('GamebookController', function ($scope, $element, ControllerS
 
 	ControllerService.GamebookController = $scope;
 
+	$scope.winningChance = function () {
+		function variationsForCombination(a, b) {
+			if (a > 7) {
+				a = 14 - a;
+			}
+			if (b > 7) {
+				b = 14 - b;
+			}
+			return (a - 1) * (b - 1);
+		}
+
+		function numVariationsForDifference(difference) {
+			let sum = 0;
+
+			difference = Math.abs(difference);
+
+			for (let i = 2; i + difference <= 12; i++) {
+				sum += variationsForCombination(i, i + difference)
+			}
+
+			return sum
+		}
+
+		let D = $scope.creature.char.skill - $scope.mainChar.char.skill;
+
+		if (D >= 10 ) {
+			return 0;
+		} else if (D < -10) {
+			return 1;
+		}
+		let possibilitiesSum = 0;
+		for (let i = 10; i > D; i--) {
+			possibilitiesSum += numVariationsForDifference(i);
+		}
+		return possibilitiesSum / (6 * 6 * 6 * 6);
+	};
+
 	$scope.initializeFight = function () {
 		$scope.currentStep = 0;
 		$scope.fled = false;
@@ -151,7 +188,7 @@ mainApp.controller('GamebookController', function ($scope, $element, ControllerS
 	};
 	$scope.initializeFight();
 
-	$scope.nextStep = function () {
+	$scope.nextStep = function ($event) {
 		let turn = $scope.currentStep % 3;
 
 		let mainChar = $scope.mainChar;
@@ -160,29 +197,32 @@ mainApp.controller('GamebookController', function ($scope, $element, ControllerS
 		if (turn == 0) {
 
 			creature.rollAttackStrength();
-			$scope.mainChar.roll = '';
+			mainChar.roll = '';
 			mainChar.wasHit = false;
 			creature.wasHit = false;
 
 		} else if (turn == 1) {
-			$scope.mainChar.rollAttackStrength();
+			mainChar.rollAttackStrength();
 
 		} else if (turn == 2) {
 			let mainStrength = mainChar.char.attackStrength;
 			let creatStregth = creature.char.attackStrength;
 
+			let elementsToAnimate = $element.find(['.turn-result']);
+
 			if (mainStrength < creatStregth) {
-				mainChar.char.stamina -= 2;
-				mainChar.wasHit = true;
+				mainChar.hit(-2);
 
 			} else if (mainStrength > creatStregth) {
-				creature.char.stamina -= 2;
-				creature.wasHit = true;
+				creature.hit(-2);
 			}
+
+			ControllerService.fadeInAnimate($element.find('.turn-result'));
 		}
 
 		$scope.currentStep++;
-		$scope.mayUseLuck = mainChar.wasHit || creature.wasHit;
+		$scope.mayUseLuck = (mainChar.wasHit || creature.wasHit) && creature.stamina > 0;
+
 	};
 
 	$scope.battleEnded = function () {
@@ -227,21 +267,21 @@ mainApp.controller('GamebookController', function ($scope, $element, ControllerS
 		$scope.mayUseLuck = false;
 
 		if (isLucky && $scope.mainChar.wasHit) {
-			$scope.mainChar.char.stamina++;
+			$scope.mainChar.hit(1);
 
 		} else if (isLucky && $scope.creature.wasHit) {
-			$scope.creature.char.stamina -= 2;
+			$scope.creature.hit(-2);
 
 		} else if (!isLucky && $scope.mainChar.wasHit) {
-			$scope.mainChar.char.stamina--;
+			$scope.mainChar.hit(-1);
 
 		} else if (!isLucky && $scope.creature.wasHit) {
-			$scope.creature.char.stamina++;
+			$scope.creature.hit(1);
 		}
 	};
 });
 
-mainApp.controller('CharController', function CharController($scope, $element) {
+mainApp.controller('CharController', function CharController($scope, $element, ControllerService) {
 
 	$scope.initialize = function () {
 		$scope.char = {
@@ -253,6 +293,13 @@ mainApp.controller('CharController', function CharController($scope, $element) {
 		$scope.roll = '';
 	};
 
+	$scope.hit = function (hpChange) {
+		$scope.char.stamina += hpChange;
+		$scope.wasHit = true;
+
+		ControllerService.fadeInAnimate($element.find('.health'))
+	};
+
 	$scope.initialize();
 
 	$scope.$parent[$($element[0]).attr('char-type')] = $scope;
@@ -262,6 +309,7 @@ mainApp.controller('CharController', function CharController($scope, $element) {
 		let b = randomRange(1, 6);
 		$scope.roll = sprintf('%d = %d + %d', a + b, a, b);
 		$scope.char.attackStrength = $scope.char.skill + a + b;
+		ControllerService.fadeInAnimate($element.find('.fight-value'));
 	};
 });
 

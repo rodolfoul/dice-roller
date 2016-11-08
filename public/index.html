@@ -116,7 +116,7 @@
 					<label>stamina:</label>
 					<input type="text" class="single-number" ng-model="char.stamina" ng-if="$parent.currentStep == 0"
 					       integer/>
-					<span ng-bind="char.stamina" ng-if="$parent.currentStep != 0"></span>
+					<span ng-bind="char.stamina" ng-if="$parent.currentStep != 0" class="health"></span>
 				</div>
 
 				<div class="form-row">
@@ -142,7 +142,7 @@
 					<label>stamina:</label>
 					<input type="text" class="single-number" ng-model="char.stamina" ng-if="$parent.currentStep == 0"
 					       integer/>
-					<span ng-bind="char.stamina" ng-if="$parent.currentStep != 0"></span>
+					<span ng-bind="char.stamina" ng-if="$parent.currentStep != 0" class="health"></span>
 				</div>
 
 				<div class="form-row">
@@ -153,22 +153,26 @@
 				</div>
 
 				<div class="form-row">
-					<span>roll:</span> <b class="fight-value" ng-bind="roll" animate-on-change="roll"></b>
+					<span>roll: </span><b class="fight-value" ng-bind="roll"></b>
 				</div>
 				<div class="form-row">
 					<span>Atk. Str.:</span> <b class="fight-value" ng-bind="char.attackStrength" ng-show="roll"></b>
 				</div>
 
 			</div>
+
 			<div class="form-row">
-				<span>Result:</span><span ng-bind="statusMessage()" class="fight-value"
+				<span>Round winning chance:</span><span ng-bind="(winningChance() * 100 | number:2) + '%'"></span>
+			</div>
+			<div class="form-row">
+				<span>Result:</span><span ng-bind="statusMessage()" class="turn-result"
 				                          ng-show="statusMessage()"></span>
 			</div>
 
 			<div>
 				<input type="button" class="btn btn-info" value="Test your luck" ng-click="testLuck($event)"
 				       ng-disabled="!mayUseLuck">
-				<input type="button" class="btn btn-info" name="next-step" value="Next step" ng-click="nextStep();"
+				<input type="button" class="btn btn-info" name="next-step" value="Next step" ng-click="nextStep($event);"
 				       ng-disabled="battleEnded()">
 				<input type="button" class="btn btn-info" value="Flee" ng-disabled="battleEnded()" ng-click="flee()">
 			</div>
@@ -184,10 +188,9 @@
 			<span ng-show="validationError" class="red validation">Luck value required.</span>
 			<br/>
 
-			<span>Chance of luck: </span><span ng-bind="(luckProbability(currentLuck) * 100 | number:2)+ '%'"></span><br />
+			<span>Chance of luck: </span>
+			<span ng-bind="(luckProbability(currentLuck) * 100 | number:2)+ '%'"></span><br/>
 
-
-			<!--element-revealer="reveal"-->
 			<input type="button" class="btn btn-info" value="Test luck" ng-click="testLuck($event)"
 			       ng-disabled="!currentLuck"/>
 			<span ng-show="roll1" class="reveal">
