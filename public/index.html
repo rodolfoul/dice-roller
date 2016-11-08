@@ -162,11 +162,11 @@
 			</div>
 
 			<div class="form-row">
-				<span>Round winning chance:</span><span ng-bind="(winningChance() * 100 | number:2) + '%'"></span>
-			</div>
-			<div class="form-row">
 				<span>Result:</span><span ng-bind="statusMessage()" class="turn-result"
 				                          ng-show="statusMessage()"></span>
+			</div>
+			<div class="form-row">
+				<span>Next winning chance:</span><span ng-bind="(winningChance() * 100 | number:2) + '%'"></span>
 			</div>
 
 			<div>

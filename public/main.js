@@ -133,45 +133,23 @@ mainApp.controller('SkillsController', function ($scope, ControllerService) {
 	}
 });
 
-mainApp.controller('GamebookController', function ($scope, $element, ControllerService) {
+mainApp.controller('GamebookController', function ($scope, $element, ControllerService, ProbabilityService) {
 
 	ControllerService.GamebookController = $scope;
 
 	$scope.winningChance = function () {
-		function variationsForCombination(a, b) {
-			if (a > 7) {
-				a = 14 - a;
-			}
-			if (b > 7) {
-				b = 14 - b;
-			}
-			return (a - 1) * (b - 1);
+		if($scope.mainChar.wasHit || $scope.creature.wasHit) {
+			return ProbabilityService.probability2d6Minus2d6GreaterThan($scope.creature.char.skill - $scope.mainChar.char.skill);
+
+		} else if ($scope.creature.roll && !$scope.mainChar.roll) {
+			return ProbabilityService.probability2d6GreaterThan($scope.creature.char.attackStrength - $scope.mainChar.char.skill);
+
+		} if ($scope.creature.roll && $scope.mainChar.roll) {
+			return $scope.mainChar.char.attackStrength > $scope.creature.char.attackStrength
+
+		} else {
+			return ProbabilityService.probability2d6Minus2d6GreaterThan($scope.creature.char.skill - $scope.mainChar.char.skill);
 		}
-
-		function numVariationsForDifference(difference) {
-			let sum = 0;
-
-			difference = Math.abs(difference);
-
-			for (let i = 2; i + difference <= 12; i++) {
-				sum += variationsForCombination(i, i + difference)
-			}
-
-			return sum
-		}
-
-		let D = $scope.creature.char.skill - $scope.mainChar.char.skill;
-
-		if (D >= 10 ) {
-			return 0;
-		} else if (D < -10) {
-			return 1;
-		}
-		let possibilitiesSum = 0;
-		for (let i = 10; i > D; i--) {
-			possibilitiesSum += numVariationsForDifference(i);
-		}
-		return possibilitiesSum / (6 * 6 * 6 * 6);
 	};
 
 	$scope.initializeFight = function () {
@@ -221,7 +199,7 @@ mainApp.controller('GamebookController', function ($scope, $element, ControllerS
 		}
 
 		$scope.currentStep++;
-		$scope.mayUseLuck = (mainChar.wasHit || creature.wasHit) && creature.stamina > 0;
+		$scope.mayUseLuck = (mainChar.wasHit || creature.wasHit) && creature.char.stamina > 0;
 
 	};
 
@@ -313,7 +291,71 @@ mainApp.controller('CharController', function CharController($scope, $element, C
 	};
 });
 
-mainApp.controller('LuckController', function ($scope, $animate, $element, ControllerService) {
+mainApp.service('ProbabilityService', function () {
+	function variationsFor2d6and2d6Combination(a, b) {
+		if (a > 7) {
+			a = 14 - a;
+		}
+		if (b > 7) {
+			b = 14 - b;
+		}
+		return (a - 1) * (b - 1);
+	}
+
+	function variants2d6Minus2d6(difference) {
+		let sum = 0;
+
+		difference = Math.abs(difference);
+
+		for (let i = 2; i + difference <= 12; i++) {
+			sum += variationsFor2d6and2d6Combination(i, i + difference)
+		}
+
+		return sum;
+	}
+
+	function variants2d6Sum(n) {
+		if (n <= 7) {
+			return n - 1;
+		} else {
+			return 13 - n;
+		}
+	}
+
+	this.probability2d6GreaterThan = function (D) {
+		return 1 - this.probability2d6LessOrEqualTo(D);
+	};
+
+	this.probability2d6Minus2d6GreaterThan = function (D) {
+		if (D >= 10) {
+			return 0;
+		} else if (D < -10) {
+			return 1;
+		}
+		let possibilitiesSum = 0;
+		for (let i = 10; i > D; i--) {
+			possibilitiesSum += variants2d6Minus2d6(i);
+		}
+		return possibilitiesSum / (6 * 6 * 6 * 6);
+	};
+
+	this.probability2d6LessOrEqualTo = function (n) {
+		if (n >= 12) {
+			return 1;
+		} else if (n < 0) {
+			return 0;
+		}
+
+		let totalPossibilities = 0;
+		for (let i = 1; i <= n; i++) {
+			totalPossibilities += variants2d6Sum(i)
+		}
+
+		return totalPossibilities / 36;
+	}
+});
+
+mainApp.controller('LuckController', function ($scope, $animate, $element, ControllerService, ProbabilityService) {
 	ControllerService.LuckController = $scope;
 
 	$scope.clearLuck = function () {
@@ -363,28 +405,7 @@ mainApp.controller('LuckController', function ($scope, $animate, $element, Contr
 		}
 	};
 
-	$scope.luckProbability = function (n) {
-		function diceNumPossibilities(n) {
-			if (n <= 7) {
-				return n - 1;
-			} else {
-				return 13 - n;
-			}
-		}
-
-		if (n >= 12) {
-			return 1;
-		} else if (n < 0) {
-			return 0;
-		}
-
-		let totalPossibilities = 0;
-		for (let i = 1; i <= n; i++) {
-			totalPossibilities += diceNumPossibilities(i)
-		}
-
-		return totalPossibilities / 36;
-	}
+	$scope.luckProbability = ProbabilityService.probability2d6LessOrEqualTo;
 
 });
 
