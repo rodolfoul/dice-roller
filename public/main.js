@@ -1,4 +1,5 @@
 const UINT32_MAX_VALUE = 0xFFFFFFFF;
+const fadeInClass = 'fade-in';
 
 
 let mainApp = angular.module('main', ['ngAnimate']);
@@ -25,7 +26,6 @@ mainApp.directive('integer', function () {
 const animateOnChange = 'animateOnChange';
 mainApp.directive(animateOnChange, function ($animate) {
 	return function (scope, elem, attr) {
-		const fadeInClass = 'fade-in';
 		scope.$watch(attr[animateOnChange], function () {
 			$animate.addClass(elem, fadeInClass).then(function () {
 				$animate.removeClass(elem, fadeInClass);
@@ -91,7 +91,32 @@ mainApp.directive(elementRevealer, function ($animate) {
 	}
 });
 
-mainApp.service('ControllerService', function () {
+mainApp.service('ControllerService', function ($animate) {
+
+	const buttonSelector = 'input[type="button"],button';
+	const disabledProp = 'disabled';
+
+	this.fadeInAnimate = function (elements) {
+		let buttons = elements.filter(buttonSelector);
+		buttons.prop(disabledProp, true);
+
+		let otherElements = elements.not(buttonSelector);
+
+		otherElements.each(function (i, el) {
+			if (i == 0) {
+				$animate.addClass(el, fadeInClass)
+					.then(function () {
+						$animate.removeClass(el, fadeInClass);
+						buttons.prop(disabledProp, false);
+					});
+			} else {
+				$animate.addClass(el, fadeInClass)
+					.then(function () {
+						$animate.removeClass(el, fadeInClass);
+					});
+			}
+		});
+	};
 });
 
 mainApp.controller('SkillsController', function ($scope, ControllerService) {
@@ -175,7 +200,7 @@ mainApp.controller('GamebookController', function ($scope, $element, ControllerS
 	$scope.statusMessage = function () {
 		let attackTurn = $scope.currentStep > 0 && ($scope.currentStep) % 3 == 0;
 
-		if($scope.fled) {
+		if ($scope.fled) {
 			return 'You fled';
 		} else if ($scope.currentStep > 0 && $scope.mainChar.char.stamina <= 0) {
 			return 'You die!';
@@ -191,10 +216,15 @@ mainApp.controller('GamebookController', function ($scope, $element, ControllerS
 
 	};
 
-	$scope.testLuck = function () {
-		$scope.mayUseLuck = false;
+	$scope.testLuck = function ($event) {
+		let isLucky;
+		try {
+			isLucky = ControllerService.LuckController.testLuck($event);
+		} catch (err) {
+			return
+		}
 
-		let isLucky = ControllerService.LuckController.testLuck();
+		$scope.mayUseLuck = false;
 
 		if (isLucky && $scope.mainChar.wasHit) {
 			$scope.mainChar.char.stamina++;
@@ -235,18 +265,35 @@ mainApp.controller('CharController', function CharController($scope, $element) {
 	};
 });
 
-mainApp.controller('LuckController', function ($scope, ControllerService) {
+mainApp.controller('LuckController', function ($scope, $animate, $element, ControllerService) {
 	ControllerService.LuckController = $scope;
 
 	$scope.clearLuck = function () {
 		$scope.roll1 = null;
 		$scope.roll2 = null;
+		$scope.validationError = false;
 	};
 
-	$scope.testLuck = function () {
+	$scope.testLuck = function ($event) {
+		var clickedButton = $($event.currentTarget);
+
+		if (!$scope.currentLuck) {
+			$scope.validationError = true;
+			ControllerService.fadeInAnimate($element.find('.validation').add(clickedButton));
+
+			throw 'invalid luck';
+		}
+
+		let elementsToAnimate = $element.find('.reveal');
+		if (clickedButton.parents().filter($element).length > 0) {
+			elementsToAnimate = elementsToAnimate.add(clickedButton);
+		}
+		ControllerService.fadeInAnimate(elementsToAnimate);
+
+		$scope.validationError = false;
+
 		$scope.roll1 = randomRange(1, 6);
 		$scope.roll2 = randomRange(1, 6);
-
 
 		$scope.isLucky = $scope.roll1 + $scope.roll2 <= $scope.currentLuck;
 
@@ -266,7 +313,31 @@ mainApp.controller('LuckController', function ($scope, ControllerService) {
 		} else {
 			return 'Unlucky :(';
 		}
+	};
+
+	$scope.luckProbability = function (n) {
+		function diceNumPossibilities(n) {
+			if (n <= 7) {
+				return n - 1;
+			} else {
+				return 13 - n;
+			}
+		}
+
+		if (n >= 12) {
+			return 1;
+		} else if (n < 0) {
+			return 0;
+		}
+
+		let totalPossibilities = 0;
+		for (let i = 1; i <= n; i++) {
+			totalPossibilities += diceNumPossibilities(i)
+		}
+
+		return totalPossibilities / 36;
 	}
+
 });
 
 function roll(nTimes, dType) {

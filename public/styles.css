@@ -61,6 +61,10 @@
 	}
 }
 
+.validation.ng-hide, .validation.ng-show{
+	transition: 5s;
+}
+
 .game-block {
 	display: inline-block;
 	border: 2px black solid;
@@ -107,6 +111,10 @@ input.single-number[type="text"] {
 .form-row :nth-child(2) {
 	width: 50%;
 	padding-left: 2.5px;
+}
+
+.ng-hide.ng-hide-animate{
+	display: none !important;
 }
 
 .fight .title {

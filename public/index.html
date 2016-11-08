@@ -6,10 +6,10 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.7/css/bootstrap.min.css"
 	      integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="styles.css">
-	
-	<script src="https://cdn.jsdelivr.net/g/jquery@3.1.1,angularjs@1.5.5(angular.js+angular-animate.js)" integrity="sha384-MDC/Ensm6JFPNEfa2/rw6wFdxYRhKpkECLy51qkU+kMFecOxn1wbH5djRSCsL8nm" crossorigin="anonymous"></script>
 
-	
+	<script src="https://cdn.jsdelivr.net/g/jquery@3.1.1(jquery.js),angularjs@1.5.5(angular.js+angular-animate.js)"
+	        integrity="sha512-InfKGVoyOr9IAbFRgogRTcGx6UJcHQ1Sz/+f2CqHitDGdwHwAFDxhfHts1InoVzxu7F5hz/rmfJ49f1x9dRbkQ=="
+	        crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -166,7 +166,7 @@
 			</div>
 
 			<div>
-				<input type="button" class="btn btn-info" value="Test your luck" ng-click="testLuck();"
+				<input type="button" class="btn btn-info" value="Test your luck" ng-click="testLuck($event)"
 				       ng-disabled="!mayUseLuck">
 				<input type="button" class="btn btn-info" name="next-step" value="Next step" ng-click="nextStep();"
 				       ng-disabled="battleEnded()">
@@ -179,19 +179,20 @@
 			<label>Current luck:</label>
 
 
-			<!--<form >-->
-				<input type="text" class="single-number" ng-model="currentLuck" ng-change="clearLuck()" integer/>
-				<span class="red reveal" ng-show="roll1">subtracting luck</span>
-				<!--<span ng-show="luckForm.currentLuck.$touched && luckForm.currentLuck.$invalid">Luck value is required.</span>-->
-			<!--</form>-->
+			<input type="text" class="single-number" ng-model="currentLuck" ng-change="clearLuck()" integer/>
+			<span class="red reveal" ng-show="roll1">subtracting luck</span>
+			<span ng-show="validationError" class="red validation">Luck value required.</span>
 			<br/>
 
+			<span>Chance of luck: </span><span ng-bind="(luckProbability(currentLuck) * 100 | number:2)+ '%'"></span><br />
 
-			<input type="button" class="btn btn-info" value="Test luck" ng-click="testLuck()"
-			       element-revealer="reveal" ng-disabled="!currentLuck"/>
+
+			<!--element-revealer="reveal"-->
+			<input type="button" class="btn btn-info" value="Test luck" ng-click="testLuck($event)"
+			       ng-disabled="!currentLuck"/>
 			<span ng-show="roll1" class="reveal">
-				{{roll1}} + {{roll2}} = <b>{{roll1 + roll2}} {{comparator}} {{currentLuck + 1}}</b> - <b
-					ng-bind="statusMessage()"></b>
+				{{roll1}} + {{roll2}} = <b>{{roll1 + roll2}} {{comparator}} {{currentLuck + 1}}</b> -
+				<b ng-bind="statusMessage()"></b>
 			</span>
 		</div>
 	</div>
