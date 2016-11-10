@@ -2,7 +2,7 @@ const UINT32_MAX_VALUE = 0xFFFFFFFF;
 const fadeInClass = 'fade-in';
 
 
-let mainApp = angular.module('main', ['ngAnimate']);
+let mainApp = angular.module('main', ['ngAnimate', 'ngStorage']);
 
 mainApp.directive('integer', function () {
 	return {
@@ -119,17 +119,18 @@ mainApp.service('ControllerService', function ($animate) {
 	};
 });
 
-mainApp.controller('SkillsController', function ($scope, ControllerService) {
+mainApp.controller('SkillsController', function ($scope, $localStorage, ControllerService) {
 	ControllerService.SkillsController = $scope;
 
 	$scope.quality = 0;
+	$scope.storage = $localStorage;
 
 	$scope.generateSkills = function () {
-		$scope.skill = randomRange(1, 6) + 6;
-		$scope.stamina = randomRange(1, 6) + randomRange(1, 6) + 12;
-		$scope.luck = randomRange(1, 6) + 6;
+		$scope.storage.skill = randomRange(1, 6) + 6;
+		$scope.storage.stamina = randomRange(1, 6) + randomRange(1, 6) + 12;
+		$scope.storage.luck = randomRange(1, 6) + 6;
 
-		$scope.quality = (getQuality($scope.skill, 7, 12) + getQuality($scope.stamina, 14, 24) + getQuality($scope.luck, 7, 12)) / 3;
+		$scope.storage.quality = (getQuality($scope.storage.skill, 7, 12) + getQuality($scope.storage.stamina, 14, 24) + getQuality($scope.storage.luck, 7, 12)) / 3;
 	}
 });
 
@@ -407,6 +408,10 @@ mainApp.controller('LuckController', function ($scope, $animate, $element, Contr
 
 	$scope.luckProbability = ProbabilityService.probability2d6LessOrEqualTo;
 
+});
+
+mainApp.controller('ItemsController', function ($scope, $localStorage) {
+	$scope.storage = $localStorage;
 });
 
 function roll(nTimes, dType) {

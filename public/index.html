@@ -7,9 +7,7 @@
 	      integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="styles.css">
 
-	<script src="https://cdn.jsdelivr.net/g/jquery@3.1.1(jquery.js),angularjs@1.5.5(angular.js+angular-animate.js)"
-	        integrity="sha512-InfKGVoyOr9IAbFRgogRTcGx6UJcHQ1Sz/+f2CqHitDGdwHwAFDxhfHts1InoVzxu7F5hz/rmfJ49f1x9dRbkQ=="
-	        crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/g/jquery@3.1.1(jquery.js),angularjs@1.5.5(angular.js+angular-animate.js),ngstorage@0.3.11"></script>
 </head>
 <body>
 
@@ -86,20 +84,20 @@
 			<input type="button" class="btn btn-info" value="Generate Character" ng-click="generateSkills()"
 			       value-revealer="skill-roll"/>
 
-			<h3>Stats (<span class="quality" ng-bind="quality | number:0"></span> / 100%)</h3>
+			<h3>Stats (<span class="quality" ng-bind="storage.quality | number:0"></span> / 100%)</h3>
 
 			<table>
 				<tr>
 					<td>SKILL</td>
-					<td class="skill-roll" ng-bind="skill"></td>
+					<td class="skill-roll" ng-bind="storage.skill"></td>
 				</tr>
 				<tr>
 					<td>STAMINA</td>
-					<td class="skill-roll" ng-bind="stamina"></td>
+					<td class="skill-roll" ng-bind="storage.stamina"></td>
 				</tr>
 				<tr>
 					<td>LUCK</td>
-					<td class="skill-roll" ng-bind="luck"></td>
+					<td class="skill-roll" ng-bind="storage.luck"></td>
 				</tr>
 			</table>
 		</div>
@@ -197,6 +195,22 @@
 				{{roll1}} + {{roll2}} = <b>{{roll1 + roll2}} {{comparator}} {{currentLuck + 1}}</b> -
 				<b ng-bind="statusMessage()"></b>
 			</span>
+		</div>
+		<div ng-controller="ItemsController">
+
+			<div>
+				<h3>Items</h3>
+				<textarea ng-model="storage.itemsText"></textarea>
+			</div>
+			<div>
+				<h3>Provisions</h3>
+				<textarea ng-model="storage.provisionsText"></textarea>
+			</div>
+			<div>
+				<h3>Potions</h3>
+				<textarea ng-model="storage.potionsText"></textarea>
+			</div>
+
 		</div>
 	</div>
 </div>
