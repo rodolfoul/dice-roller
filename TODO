@@ -1,6 +1,9 @@
-Correct Test your luck
-Add correct probability after creature roll
+Restyle main page from deathtrap-dungeon.
+add potions/provisions/etc...
+Organize main.js and styles.css
 
+X Correct Test your luck
+X Add correct probability after creature roll
 X Make better animations for next step
 X add validation to luck and skills (Check if number present), check angular
 X Implement test your luck after flee

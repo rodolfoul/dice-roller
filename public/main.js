@@ -130,8 +130,11 @@ mainApp.controller('SkillsController', function ($scope, $localStorage, Controll
 		$scope.storage.stamina = randomRange(1, 6) + randomRange(1, 6) + 12;
 		$scope.storage.luck = randomRange(1, 6) + 6;
 
-		$scope.storage.quality = (getQuality($scope.storage.skill, 7, 12) + getQuality($scope.storage.stamina, 14, 24) + getQuality($scope.storage.luck, 7, 12)) / 3;
-	}
+	};
+
+	$scope.calculateQuality = function () {
+		return (getQuality($scope.storage.skill, 7, 12) + getQuality($scope.storage.stamina, 14, 24) + getQuality($scope.storage.luck, 7, 12)) / 3;
+	};
 });
 
 mainApp.controller('GamebookController', function ($scope, $element, ControllerService, ProbabilityService) {
@@ -139,13 +142,14 @@ mainApp.controller('GamebookController', function ($scope, $element, ControllerS
 	ControllerService.GamebookController = $scope;
 
 	$scope.winningChance = function () {
-		if($scope.mainChar.wasHit || $scope.creature.wasHit) {
+		if ($scope.mainChar.wasHit || $scope.creature.wasHit) {
 			return ProbabilityService.probability2d6Minus2d6GreaterThan($scope.creature.char.skill - $scope.mainChar.char.skill);
 
 		} else if ($scope.creature.roll && !$scope.mainChar.roll) {
 			return ProbabilityService.probability2d6GreaterThan($scope.creature.char.attackStrength - $scope.mainChar.char.skill);
 
-		} if ($scope.creature.roll && $scope.mainChar.roll) {
+		}
+		if ($scope.creature.roll && $scope.mainChar.roll) {
 			return $scope.mainChar.char.attackStrength > $scope.creature.char.attackStrength
 
 		} else {

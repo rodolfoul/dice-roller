@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="main">
 <head>
 	<meta charset="UTF-8">
 	<title>Deathtrap Dungeon</title>
@@ -20,7 +20,7 @@
 		<input type="button" class="btn btn-info" value="Generate Character" ng-click="generateSkills()"
 		       value-revealer="skill-roll"/>
 
-		<h3>Stats (<span class="quality" ng-bind="storage.quality | number:0"></span> / 100%)</h3>
+		<h3>Stats (<span class="quality" ng-bind="calculateQuality() | number:0"></span> / 100%)</h3>
 
 		<table>
 			<tr>
