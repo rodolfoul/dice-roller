@@ -7,7 +7,7 @@
 	<meta charset="utf-8"/>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.7/css/bootstrap.min.css"
 	      integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="../styles.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
 
 	<script src="https://cdn.jsdelivr.net/g/jquery@3.1.1(jquery.js),angularjs@1.5.5(angular.js+angular-animate.js),ngstorage@0.3.11"></script>
 
@@ -139,7 +139,7 @@
 		<div ng-controller="ItemsController">
 			<div>
 				<h3>Equipment</h3>
-				<textarea ng-model="storage.equipmentText" ng-size="storage.equipmentSize"></textarea>
+				<textarea ng-model="storage.equipmentText" size-bind="storage.equipmentSize"></textarea>
 			</div>
 			<div>
 				<h3>Items</h3>

@@ -1,15 +1,33 @@
 (function () {
-	const sizeBind = 'sizeBind';
-	angular.module('main').directive(sizeBind, function () {
-		return function (scope, ele, attr, ctrl) {
+	const sizeBindDirective = 'sizeBind';
+	angular.module('main').directive(sizeBindDirective, function () {
+		return {
+			restrict: 'A',
+			scope: {
+				size: '=' + sizeBindDirective
+			},
 
-			scope.$watch(function () {
-				let size = ele.css(['width', 'height']);
-				return size.width + size.height;
+			link: function (scope, ele) {
 
-			}, function (newValue, oldValue) {
-				scope[attr[sizeBind]] = newValue;
-			});
+				let arr = scope.size;
+				if (arr != null) {
+					ele.css({
+						width: arr[0],
+						height: arr[1]
+					});
+				}
+
+				scope.$watch(function () {
+					let size = ele.css(['width', 'height']);
+					return [size.width, size.height];
+
+				}, function (newValue, oldValue) {
+					if (newValue != oldValue) {
+						scope.size = newValue;
+					}
+
+				}, true);
+			}
 		}
 	});
 })();

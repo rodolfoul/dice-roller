@@ -89,7 +89,7 @@
 }
 
 input.single-number[type="text"], input.single-number[type="number"] {
-	width: 40px;
+	width: 50px;
 }
 
 [char-type] {
