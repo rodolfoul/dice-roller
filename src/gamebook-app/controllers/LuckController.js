@@ -1,6 +1,6 @@
-angular.module('main').controller('LuckController', function ($scope, $animate, $element, ControllerService, ProbabilityService) {
+angular.module('gamebook').controller('LuckController', function ($scope, $localStorage, $animate, $element, ControllerService, ProbabilityService) {
 	ControllerService.LuckController = $scope;
-
+	$scope.storage = $localStorage;
 
 	$scope.clearLuck = function () {
 		$scope.roll1 = null;
@@ -8,11 +8,11 @@ angular.module('main').controller('LuckController', function ($scope, $animate, 
 		$scope.validationError = false;
 	};
 
-	randomRange = ProbabilityService.randomRange;
+	let randomRange = ProbabilityService.randomRange;
 	$scope.testLuck = function ($event) {
 		var clickedButton = $($event.currentTarget);
 
-		if (!$scope.currentLuck) {
+		if (!storage.currentLuck) {
 			$scope.validationError = true;
 			ControllerService.fadeInAnimate($element.find('.validation').add(clickedButton));
 
@@ -30,14 +30,14 @@ angular.module('main').controller('LuckController', function ($scope, $animate, 
 		$scope.roll1 = randomRange(1, 6);
 		$scope.roll2 = randomRange(1, 6);
 
-		$scope.isLucky = $scope.roll1 + $scope.roll2 <= $scope.currentLuck;
+		$scope.isLucky = $scope.roll1 + $scope.roll2 <= storage.currentLuck;
 
 		if ($scope.isLucky) {
 			$scope.comparator = '≤'
 		} else {
 			$scope.comparator = '>'
 		}
-		$scope.currentLuck--;
+		storage.currentLuck--;
 
 		return $scope.isLucky;
 	};

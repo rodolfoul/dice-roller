@@ -1,4 +1,4 @@
-angular.module('main').service('ProbabilityService', function () {
+angular.module('gamebook').service('ProbabilityService', function () {
 	const UINT32_MAX_VALUE = 0xFFFFFFFF;
 
 	function variationsFor2d6and2d6Combination(a, b) {

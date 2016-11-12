@@ -1,4 +1,4 @@
-angular.module('main').service('ControllerService', function ($animate) {
+angular.module('gamebook').service('ControllerService', function ($animate) {
 	const fadeInClass = 'fade-in';
 	const tdFadeInClass = 'value-reveal';
 

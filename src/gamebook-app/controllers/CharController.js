@@ -1,14 +1,21 @@
-angular.module('main').controller('CharController', function CharController($scope, $element, ControllerService, ProbabilityService) {
+angular.module('gamebook').controller('CharController', function CharController($scope, $element, $localStorage, ControllerService, ProbabilityService) {
+
+	let charType = $($element[0]).attr('char-type');
+	$scope.$parent[charType] = $scope;
+	let randomRange = ProbabilityService.randomRange;
 
 	$scope.initialize = function () {
-		$scope.char = $scope.char || {
-			stamina: null,
-			skill: null,
-			attackStrength: null
-		};
+		$localStorage[charType] = $localStorage[charType] || {
+				stamina: null,
+				skill: null,
+				attackStrength: null
+			};
+
+		$scope.char = $localStorage[charType];
 
 		$scope.roll = null;
 	};
+	$scope.initialize();
 
 	$scope.hit = function (hpChange) {
 		$scope.char.stamina += hpChange;
@@ -16,11 +23,6 @@ angular.module('main').controller('CharController', function CharController($sco
 
 		ControllerService.fadeInAnimate($element.find('.health'))
 	};
-
-
-	$scope.initialize();
-	$scope.$parent[$($element[0]).attr('char-type')] = $scope;
-	let randomRange = ProbabilityService.randomRange;
 
 	$scope.rollAttackStrength = function () {
 		let a = randomRange(1, 6);

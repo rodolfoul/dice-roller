@@ -1,4 +1,4 @@
-angular.module('main').directive('integer', function () {
+angular.module('gamebook').directive('integer', function () {
 	return {
 		require: 'ngModel',
 		link: function (scope, ele, attr, ctrl) {

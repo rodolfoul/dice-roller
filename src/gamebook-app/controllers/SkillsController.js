@@ -1,4 +1,4 @@
-angular.module('main').controller('SkillsController', function ($scope, $localStorage, $element, ControllerService, ProbabilityService) {
+angular.module('gamebook').controller('SkillsController', function ($scope, $localStorage, $element, ControllerService, ProbabilityService) {
 	ControllerService.SkillsController = $scope;
 
 	$scope.quality = 0;
@@ -22,12 +22,12 @@ angular.module('main').controller('SkillsController', function ($scope, $localSt
 	};
 
 	$scope.applySkills = function () {
-		ControllerService.GamebookController.mainChar.char.skill = $scope.storage.skill;
-		ControllerService.GamebookController.mainChar.char.stamina = $scope.storage.stamina;
-		ControllerService.LuckController.currentLuck = $scope.storage.luck;
+		ControllerService.FightController.mainChar.char.skill = $scope.storage.skill;
+		ControllerService.FightController.mainChar.char.stamina = $scope.storage.stamina;
+		$scope.storage.currentLuck = $scope.storage.luck;
 	};
 
 	$scope.mayApplySkills = function () {
-		return ControllerService.GamebookController.creature.char.attackStrength;
+		return ControllerService.FightController.currentStep != 0;
 	};
 });

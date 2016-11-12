@@ -1,6 +1,6 @@
-angular.module('main').controller('GamebookController', function ($scope, $element, ControllerService, ProbabilityService) {
+angular.module('gamebook').controller('FightController', function ($scope, $element, ControllerService, ProbabilityService) {
 
-	ControllerService.GamebookController = $scope;
+	ControllerService.FightController = $scope;
 
 	$scope.winningChance = function () {
 		if ($scope.mainChar.wasHit || $scope.creature.wasHit) {

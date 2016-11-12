@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="main">
+<html lang="en" ng-app="gamebook">
 <head>
 	<meta charset="UTF-8">
 	<title>Deathtrap Dungeon</title>
@@ -21,7 +21,7 @@
 <h2>Deathtrap Dungeon</h2>
 <div>
 	<div style="display: flex; max-height: 670px;">
-		<div class="game-block deathtrap-dungeon" ng-controller="GamebookController">
+		<div class="game-block deathtrap-dungeon" ng-controller="FightController">
 
 			<div ng-controller="SkillsController">
 				<input type="button" class="btn btn-info" value="Generate Character" ng-click="generateSkills($event)"/>
@@ -132,18 +132,18 @@
 				<label>Current luck:</label>
 
 
-				<input type="number" class="single-number" ng-model="currentLuck" ng-change="clearLuck()" integer/>
+				<input type="number" class="single-number" ng-model="storage.currentLuck" ng-change="clearLuck()" integer/>
 				<span class="red reveal" ng-show="roll1">subtracting luck</span>
 				<span ng-show="validationError" class="red validation">Luck value required.</span>
 				<br/>
 
 				<span>Chance of luck: </span>
-				<span ng-bind="(luckProbability(currentLuck) * 100 | number:2)+ '%'"></span><br/>
+				<span ng-bind="(luckProbability(storage.currentLuck) * 100 | number:2)+ '%'"></span><br/>
 
 				<input type="button" class="btn btn-info" value="Test luck" ng-click="testLuck($event)"
-				       ng-disabled="!currentLuck"/>
+				       ng-disabled="!storage.currentLuck"/>
 				<span ng-show="roll1" class="reveal">
-				{{roll1}} + {{roll2}} = <b>{{roll1 + roll2}} {{comparator}} {{currentLuck + 1}}</b>:
+				{{roll1}} + {{roll2}} = <b>{{roll1 + roll2}} {{comparator}} {{storage.currentLuck + 1}}</b>:
 				<b ng-bind="statusMessage()"></b>
 			</span>
 			</div>
@@ -178,17 +178,17 @@
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/g/angular-base-apps@2.0.6,sprintf.js@1.0.3,jquery.noisy@0.1"></script>
+<script src="https://cdn.jsdelivr.net/g/jquery.noisy@0.1,sprintf.js@1.0.3(sprintf.min.js)"></script>
 <!--build:js js/main.min.js -->
-<script type="text/javascript" src="app/main.module.js"></script>
-<script type="text/javascript" src="app/controllers/CharController.js"></script>
-<script type="text/javascript" src="app/controllers/GamebookController.js"></script>
-<script type="text/javascript" src="app/controllers/ItemsController.js"></script>
-<script type="text/javascript" src="app/controllers/LuckController.js"></script>
-<script type="text/javascript" src="app/controllers/SkillsController.js"></script>
-<script type="text/javascript" src="app/directives/Integer.js"></script>
-<script type="text/javascript" src="app/services/ControllerService.js"></script>
-<script type="text/javascript" src="app/services/ProbabilityService.js"></script>
+<script type="text/javascript" src="gamebook-app/gamebook.module.js"></script>
+<script type="text/javascript" src="gamebook-app/controllers/CharController.js"></script>
+<script type="text/javascript" src="gamebook-app/controllers/FightController.js"></script>
+<script type="text/javascript" src="gamebook-app/controllers/ItemsController.js"></script>
+<script type="text/javascript" src="gamebook-app/controllers/LuckController.js"></script>
+<script type="text/javascript" src="gamebook-app/controllers/SkillsController.js"></script>
+<script type="text/javascript" src="gamebook-app/directives/Integer.js"></script>
+<script type="text/javascript" src="gamebook-app/services/ControllerService.js"></script>
+<script type="text/javascript" src="gamebook-app/services/ProbabilityService.js"></script>
 <!-- endbuild -->
 </body>
 </html>

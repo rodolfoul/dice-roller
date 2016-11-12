@@ -1,5 +1,4 @@
 const UINT32_MAX_VALUE = 0xFFFFFFFF;
-const fadeInClass = 'fade-in';
 
 function roll(nTimes, dType) {
 	let results = [];
