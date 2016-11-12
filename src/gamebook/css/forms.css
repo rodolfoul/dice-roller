@@ -1,22 +1,6 @@
-.roll-label {
-	display: inline;
-	vertical-align: middle;
-	width: 150px;
-	font-size: large;
-}
-
-.roll-button {
-	width: 120px;
-	margin-bottom: 5px;
-}
-
 .skill-roll {
 	color: red;
 	width: 35px;
-}
-
-.max-skill {
-	font-weight: 800;
 }
 
 .red {
@@ -29,10 +13,6 @@
 
 input.single-number[type="text"], input.single-number[type="number"] {
 	width: 50px;
-}
-
-[char-type] {
-	padding: 7px;
 }
 
 .form-row {

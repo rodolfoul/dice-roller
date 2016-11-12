@@ -6,10 +6,6 @@
 	opacity: 0;
 }
 
-.value-reveal {
-	animation: 1.5s value-reveal-keyframes;
-}
-
 .fade-in {
 	animation: 1.5s fade-in;
 }
@@ -23,6 +19,10 @@
 	}
 }
 
+.value-reveal {
+	animation: 1.5s value-reveal-keyframes;
+}
+
 @keyframes value-reveal-keyframes {
 	from {
 		color: rgba(0, 0, 0, 0);
@@ -30,12 +30,4 @@
 	to {
 		color: red;
 	}
-}
-
-.validation.ng-hide, .validation.ng-show {
-	transition: 5s;
-}
-
-.ng-hide.ng-hide-animate {
-	display: none !important;
 }

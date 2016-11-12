@@ -1,0 +1,21 @@
+{
+  "name": "dice-roller",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/w-rodolfo-labsch/dice-roller.git"
+  },
+  "author": "Rodolfo Udo Labsch",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/w-rodolfo-labsch/dice-roller/issues"
+  },
+  "homepage": "https://github.com/w-rodolfo-labsch/dice-roller#readme",
+  "devDependencies": {
+    "browser-sync": "^2.17.5",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-useref": "^3.1.2"
+  }
+}

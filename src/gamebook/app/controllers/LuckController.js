@@ -33,7 +33,7 @@ angular.module('main').controller('LuckController', function ($scope, $animate, 
 		$scope.isLucky = $scope.roll1 + $scope.roll2 <= $scope.currentLuck;
 
 		if ($scope.isLucky) {
-			$scope.comparator = '<='
+			$scope.comparator = '≤'
 		} else {
 			$scope.comparator = '>'
 		}

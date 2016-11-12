@@ -8,9 +8,11 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.7/css/bootstrap.min.css"
 	      integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 
+	<!--build:css css/styles.min.css-->
 	<link rel="stylesheet" type="text/css" href="css/layout.css">
 	<link rel="stylesheet" type="text/css" href="css/animations.css">
 	<link rel="stylesheet" type="text/css" href="css/forms.css">
+	<!--endbuild-->
 
 	<script src="https://cdn.jsdelivr.net/g/jquery@3.1.1(jquery.js),angularjs@1.5.5(angular.js+angular-animate.js),ngstorage@0.3.11"></script>
 
@@ -18,12 +20,11 @@
 <body>
 <h2>Deathtrap Dungeon</h2>
 <div>
-	<div style="display: flex; max-height: 90vh;">
+	<div style="display: flex; max-height: 670px;">
 		<div class="game-block deathtrap-dungeon" ng-controller="GamebookController">
 
 			<div ng-controller="SkillsController">
-				<input type="button" class="btn btn-info" value="Generate Character" ng-click="generateSkills()"
-				       value-revealer="skill-roll"/>
+				<input type="button" class="btn btn-info" value="Generate Character" ng-click="generateSkills($event)"/>
 
 				<h3>Stats (<span class="quality" ng-bind="calculateQuality() | number:0"></span> / 100%)</h3>
 
@@ -142,7 +143,7 @@
 				<input type="button" class="btn btn-info" value="Test luck" ng-click="testLuck($event)"
 				       ng-disabled="!currentLuck"/>
 				<span ng-show="roll1" class="reveal">
-				{{roll1}} + {{roll2}} = <b>{{roll1 + roll2}} {{comparator}} {{currentLuck + 1}}</b> -
+				{{roll1}} + {{roll2}} = <b>{{roll1 + roll2}} {{comparator}} {{currentLuck + 1}}</b>:
 				<b ng-bind="statusMessage()"></b>
 			</span>
 			</div>
@@ -178,17 +179,16 @@
 
 
 <script src="https://cdn.jsdelivr.net/g/angular-base-apps@2.0.6,sprintf.js@1.0.3,jquery.noisy@0.1"></script>
+<!--build:js js/main.min.js -->
 <script type="text/javascript" src="app/main.module.js"></script>
 <script type="text/javascript" src="app/controllers/CharController.js"></script>
 <script type="text/javascript" src="app/controllers/GamebookController.js"></script>
 <script type="text/javascript" src="app/controllers/ItemsController.js"></script>
 <script type="text/javascript" src="app/controllers/LuckController.js"></script>
 <script type="text/javascript" src="app/controllers/SkillsController.js"></script>
-<script type="text/javascript" src="app/directives/AnimateOnChange.js"></script>
-<script type="text/javascript" src="app/directives/ValueRevealer.js"></script>
-<script type="text/javascript" src="app/directives/ElementRevealer.js"></script>
 <script type="text/javascript" src="app/directives/Integer.js"></script>
 <script type="text/javascript" src="app/services/ControllerService.js"></script>
 <script type="text/javascript" src="app/services/ProbabilityService.js"></script>
+<!-- endbuild -->
 </body>
 </html>
