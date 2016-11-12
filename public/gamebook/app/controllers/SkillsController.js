@@ -19,4 +19,14 @@ angular.module('main').controller('SkillsController', function ($scope, $localSt
 	$scope.calculateQuality = function () {
 		return (getQuality($scope.storage.skill, 7, 12) + getQuality($scope.storage.stamina, 14, 24) + getQuality($scope.storage.luck, 7, 12)) / 3;
 	};
+
+	$scope.applySkills = function () {
+		ControllerService.GamebookController.mainChar.char.skill = $scope.storage.skill;
+		ControllerService.GamebookController.mainChar.char.stamina = $scope.storage.stamina;
+		ControllerService.LuckController.currentLuck = $scope.storage.luck;
+	};
+
+	$scope.mayApplySkills = function () {
+		return ControllerService.GamebookController.creature.char.attackStrength;
+	};
 });

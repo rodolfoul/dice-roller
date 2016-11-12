@@ -1,13 +1,13 @@
 angular.module('main').controller('CharController', function CharController($scope, $element, ControllerService, ProbabilityService) {
 
 	$scope.initialize = function () {
-		$scope.char = {
-			stamina: 10,
-			skill: 10,
-			attackStrength: ''
+		$scope.char = $scope.char || {
+			stamina: null,
+			skill: null,
+			attackStrength: null
 		};
 
-		$scope.roll = '';
+		$scope.roll = null;
 	};
 
 	$scope.hit = function (hpChange) {
@@ -17,10 +17,9 @@ angular.module('main').controller('CharController', function CharController($sco
 		ControllerService.fadeInAnimate($element.find('.health'))
 	};
 
+
 	$scope.initialize();
-
 	$scope.$parent[$($element[0]).attr('char-type')] = $scope;
-
 	let randomRange = ProbabilityService.randomRange;
 
 	$scope.rollAttackStrength = function () {

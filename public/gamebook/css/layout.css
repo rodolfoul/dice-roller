@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css?family=Rosarivo');
+
+body {
+	font-family: 'Rosarivo', serif;
+}
+
+body div {
+	display: inline-block;
+}
+
+td {
+	text-align: center;
+	font-size: large;
+}
+
+table, td, tr {
+	border-bottom: 1px solid black;
+}
+
+h3 {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.btn {
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+.deathtrap-dungeon {
+	width: 350px;
+}
+
+.game-block {
+	display: inline-block;
+	border: 2px black solid;
+	margin: 3px;
+	padding: 10px;
+}
+
+.games {
+	display: flex;
+}
+
+.fight > [char-type] {
+	display: inline-block;
+	border: 1px black solid;
+	margin-left: -2.5px;
+	margin-right: -2.5px;
+	width: 50%;
+}
+
+.fight .title {
+	text-align: center;
+}
+
+.fight label, .fight input {
+	vertical-align: middle;
+}
+
+.creature {
+	display: table;
+}
+

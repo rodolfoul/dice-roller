@@ -51,5 +51,4 @@ angular.module('main').controller('LuckController', function ($scope, $animate, 
 	};
 
 	$scope.luckProbability = ProbabilityService.probability2d6LessOrEqualTo;
-
 });
