@@ -12,7 +12,7 @@ angular.module('gamebook').controller('LuckController', function ($scope, $local
 	$scope.testLuck = function ($event) {
 		var clickedButton = $($event.currentTarget);
 
-		if (!storage.currentLuck) {
+		if (!$scope.storage.currentLuck) {
 			$scope.validationError = true;
 			ControllerService.fadeInAnimate($element.find('.validation').add(clickedButton));
 
@@ -30,14 +30,14 @@ angular.module('gamebook').controller('LuckController', function ($scope, $local
 		$scope.roll1 = randomRange(1, 6);
 		$scope.roll2 = randomRange(1, 6);
 
-		$scope.isLucky = $scope.roll1 + $scope.roll2 <= storage.currentLuck;
+		$scope.isLucky = $scope.roll1 + $scope.roll2 <= $scope.storage.currentLuck;
 
 		if ($scope.isLucky) {
 			$scope.comparator = '≤'
 		} else {
 			$scope.comparator = '>'
 		}
-		storage.currentLuck--;
+		$scope.storage.currentLuck--;
 
 		return $scope.isLucky;
 	};

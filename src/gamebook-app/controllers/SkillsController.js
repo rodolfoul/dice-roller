@@ -14,7 +14,7 @@ angular.module('gamebook').controller('SkillsController', function ($scope, $loc
 		$scope.storage.stamina = randomRange(1, 6) + randomRange(1, 6) + 12;
 		$scope.storage.luck = randomRange(1, 6) + 6;
 
-		ControllerService.fadeInAnimate($element.find('.skill-roll').add($event.currentTarget));
+		ControllerService.fadeInAnimate($element.find('.skill-roll,.quality').add($event.currentTarget));
 	};
 
 	$scope.calculateQuality = function () {
