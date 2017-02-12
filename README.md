@@ -1,4 +1,4 @@
-# gamebook-helper
+# Gamebook Helper
 
 ## Description
 
